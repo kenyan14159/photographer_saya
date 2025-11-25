@@ -1,9 +1,43 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { X } from 'lucide-react';
 
 const About: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { scrollYProgress } = useScroll();
+  const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
+
   return (
-    <section id="about" className="py-32 md:py-48 bg-[#F5F1E8] overflow-hidden">
+    <section id="about" className="py-32 md:py-48 bg-[#F5F1E8] overflow-hidden relative">
+      {/* Background Decorative Elements */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <motion.div 
+          style={{ y }}
+          className="absolute top-20 right-20 w-64 h-64 rounded-full border border-beige-200 opacity-30 hidden lg:block" 
+        />
+        <div className="absolute bottom-40 left-10 w-32 h-32 border border-beige-200 opacity-30 rotate-45 hidden lg:block" />
+        {/* Floating dots */}
+        {[...Array(5)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-2 h-2 bg-beige-300 rounded-full opacity-40 hidden lg:block"
+            style={{
+              left: `${10 + i * 20}%`,
+              top: `${20 + (i % 3) * 30}%`,
+            }}
+            animate={{
+              y: [-10, 10, -10],
+              opacity: [0.2, 0.5, 0.2],
+            }}
+            transition={{
+              duration: 4 + i * 0.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
+
       <div className="max-w-7xl mx-auto px-6 relative">
         
         {/* Editorial Layout */}
@@ -12,33 +46,71 @@ const About: React.FC = () => {
             {/* Text Column (Left on Desktop) */}
             <div className="md:col-span-5 md:order-1 order-2 relative z-10">
                  <motion.div
-                     initial={{ opacity: 0, x: -20 }}
+                     initial={{ opacity: 0, x: -30 }}
                      whileInView={{ opacity: 1, x: 0 }}
                      viewport={{ once: true, margin: "-10%" }}
                      transition={{ duration: 0.8, delay: 0.2 }}
                      className="md:pr-12"
                  >
-                    <h2 className="text-5xl md:text-7xl font-serif italic text-beige-950 mb-12 opacity-90">
+                    {/* Section Label */}
+                    <motion.span 
+                      className="text-[10px] uppercase tracking-[0.3em] text-beige-500 mb-4 block"
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      About the Photographer
+                    </motion.span>
+                    
+                    <h2 className="text-5xl md:text-7xl font-serif italic text-beige-950 mb-8 opacity-90 relative">
                         About<br/>Me
+                        <motion.div 
+                          className="absolute -bottom-2 left-0 h-[2px] bg-gradient-to-r from-beige-400 to-transparent"
+                          initial={{ width: 0 }}
+                          whileInView={{ width: '50%' }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 1, delay: 0.5 }}
+                        />
                     </h2>
                     
-                    <div className="space-y-8 text-beige-900/80 leading-loose text-sm md:text-base font-light font-sans text-justify">
-                        <p>
-                            <span className="text-3xl float-left mr-2 mt-[-8px] font-serif italic text-beige-400">E</span>
+                    <div className="space-y-6 text-beige-900/80 leading-relaxed text-sm md:text-base font-light font-sans">
+                        <motion.p
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.6, delay: 0.3 }}
+                        >
                             駅伝・陸上競技・マラソンを中心にスポーツ写真を撮影しています。女性フォトグラファーとして、アスリートの集中した表情や全力で駆け抜ける一瞬を写真に収めることに魅力を感じています。
-                        </p>
-                        <p>
+                        </motion.p>
+                        <motion.p
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.6, delay: 0.4 }}
+                        >
                             最初は趣味で始めたカメラでしたが、競技に向き合う選手たちの姿に心を打たれ、今では関東エリアの陸上大会や駅伝大会を訪れて、ランナーや陸上選手が懸命に競技する瞬間を記録し続けています。
-                        </p>
-                        <p>
+                        </motion.p>
+                        <motion.p
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.6, delay: 0.5 }}
+                        >
                             撮影した一枚一枚には、選手たちの汗と涙、そして夢への想いが写っています。女性ランナーから実業団選手まで、スポーツが持つ感動を写真を通じて多くの方にお伝えできればと願っています。
-                        </p>
+                        </motion.p>
                     </div>
 
-                    <div className="mt-12 pt-12 border-t border-beige-950/10">
-                        <p className="font-serif italic text-xl text-beige-950">Saya</p>
-                        <p className="text-xs uppercase tracking-widest text-beige-500 mt-1">Photographer / Tokyo</p>
-                    </div>
+                    <motion.div 
+                      className="mt-10 pt-10 border-t border-beige-950/10"
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.7 }}
+                    >
+                        <p className="font-serif italic text-2xl text-beige-950">Saya</p>
+                        <p className="text-xs uppercase tracking-widest text-beige-500 mt-1">Photographer</p>
+                    </motion.div>
                  </motion.div>
             </div>
 
@@ -49,21 +121,83 @@ const About: React.FC = () => {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 1, ease: "easeOut" }}
-                    className="relative pl-0 md:pl-12"
+                    className="relative pl-0 md:pl-12 cursor-pointer group"
+                    onClick={() => setIsModalOpen(true)}
                 >
                      <div className="relative aspect-[3/4] md:aspect-[4/5] overflow-hidden bg-beige-200">
                         <img 
-                            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1000&auto=format&fit=crop" 
+                            src="https://photographer-saya.com/wrps/wp-content/uploads/2025/10/saya30.jpg" 
                             alt="Saya" 
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                         />
+                        {/* Enhanced Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <motion.div 
+                              className="w-16 h-16 rounded-full border border-white/0 group-hover:border-white/60 flex items-center justify-center transition-all duration-500 backdrop-blur-0 group-hover:backdrop-blur-sm"
+                              whileHover={{ scale: 1.1 }}
+                            >
+                              <span className="text-white opacity-0 group-hover:opacity-100 tracking-widest text-xs font-light transition-opacity duration-300 uppercase">View</span>
+                            </motion.div>
+                        </div>
+                        {/* Corner decorations on hover */}
+                        <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-white/0 group-hover:border-white/50 transition-all duration-500" />
+                        <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-white/0 group-hover:border-white/50 transition-all duration-500" />
                     </div>
-                    {/* Decorative Elements */}
-                    <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-[#E8DCC8] -z-10 hidden md:block"></div>
+                    {/* Decorative Elements - Enhanced */}
+                    <motion.div 
+                      className="absolute -bottom-8 -left-8 w-32 h-32 bg-[#E8DCC8] -z-10 hidden md:block"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.8, delay: 0.3 }}
+                    />
+                    <motion.div 
+                      className="absolute -top-4 -right-4 w-16 h-16 border border-beige-300 -z-10 hidden md:block"
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.8, delay: 0.5 }}
+                    />
                 </motion.div>
             </div>
         </div>
       </div>
+
+      {/* Image Modal */}
+      <AnimatePresence>
+        {isModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] bg-[#F5F1E8]/95 flex items-center justify-center p-4 md:p-10"
+            onClick={() => setIsModalOpen(false)}
+          >
+            <button 
+                className="fixed top-6 right-6 text-beige-950/50 hover:text-beige-950 transition-colors p-2 z-50"
+                onClick={() => setIsModalOpen(false)}
+            >
+                <X className="w-8 h-8" strokeWidth={1} />
+            </button>
+
+            <motion.div 
+                className="relative w-full h-full flex items-center justify-center p-2 md:p-12"
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                onClick={(e) => e.stopPropagation()}
+            >
+                <img
+                    src="https://photographer-saya.com/wrps/wp-content/uploads/2025/10/saya30.jpg"
+                    alt="Saya"
+                    className="w-auto h-auto max-w-full max-h-full object-contain shadow-2xl"
+                />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };

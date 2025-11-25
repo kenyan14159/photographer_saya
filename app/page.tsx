@@ -18,10 +18,10 @@ const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Reduced loading time for better UX
+    // Adjusted loading time for animation
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1500);
+    }, 2400);
 
     return () => clearTimeout(timer);
   }, []);

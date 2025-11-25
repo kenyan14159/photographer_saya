@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 const MarqueeText = ({ children }: { children?: React.ReactNode }) => (
     <div className="relative flex overflow-hidden py-8 md:py-16 bg-[#F5F1E8] border-b border-[#C4B5A0]/30">
@@ -16,39 +16,89 @@ const MarqueeText = ({ children }: { children?: React.ReactNode }) => (
         </h2>
       </motion.div>
       
-      {/* Overlay Text - Static */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <p className="text-xs md:text-sm uppercase tracking-[0.3em] text-beige-900 bg-[#F5F1E8]/80 px-6 py-3 backdrop-blur-sm border border-beige-300 font-serif italic">
-            Moments of Passion
-          </p>
-      </div>
+      {/* Overlay Text - Static with enhanced styling */}
+      <motion.div 
+        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        initial={{ opacity: 0, scale: 0.9 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+      >
+          <div className="relative">
+            <p className="text-xs md:text-sm uppercase tracking-[0.3em] text-beige-900 bg-[#F5F1E8]/90 px-8 py-4 backdrop-blur-sm border border-beige-300 font-serif italic">
+              Moments of Passion
+            </p>
+            {/* Decorative dots */}
+            <div className="absolute -top-1 -left-1 w-2 h-2 bg-beige-400 rounded-full" />
+            <div className="absolute -bottom-1 -right-1 w-2 h-2 bg-beige-400 rounded-full" />
+          </div>
+      </motion.div>
     </div>
 );
 
 const GalleryIntro: React.FC = () => {
+  const { scrollYProgress } = useScroll();
+  const opacity = useTransform(scrollYProgress, [0, 0.2], [0.5, 1]);
+
   return (
     <section className="relative z-20 bg-[#F5F1E8]">
-        <div className="px-6 md:px-12 py-24 max-w-5xl mx-auto">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 mb-4">
-                <h3 className="text-3xl md:text-5xl font-serif italic text-beige-950 leading-tight">
-                    Capturing<br/>The Soul of Sport
-                </h3>
-                <div className="max-w-md space-y-4 text-sm leading-loose text-beige-900/80 text-justify font-sans font-light">
-                    <p>
-                        静寂と熱狂。その一瞬のために、すべてを懸けるアスリートたちの美しさ。
-                    </p>
-                    <p>
-                        風を切る音、荒い息遣い、ゴールテープを切る瞬間の咆哮。
-                        目に見える動きだけでなく、その奥にある「揺れ動く感情」までもフィルムに焼き付けたい。
-                    </p>
-                    <p>
-                        Sayaの写真は、スポーツというドラマチックな瞬間を、永遠の記憶として刻みます。
-                    </p>
+        {/* Decorative Line */}
+        <div className="absolute left-1/2 top-0 w-[1px] h-16 bg-gradient-to-b from-transparent to-beige-300 -translate-x-1/2" />
+        
+        <motion.div 
+          style={{ opacity }}
+          className="px-6 md:px-12 py-24 max-w-5xl mx-auto"
+        >
+            <motion.div 
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="flex flex-col md:flex-row md:items-end justify-between gap-10 mb-4"
+            >
+                <div className="relative">
+                  <motion.span 
+                    className="absolute -left-8 top-0 text-6xl md:text-8xl font-serif italic text-beige-200 opacity-50 select-none hidden md:block"
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 0.5, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1, delay: 0.3 }}
+                  >
+                    "
+                  </motion.span>
+                  <h3 className="text-3xl md:text-5xl font-serif italic text-beige-950 leading-tight">
+                      Moments<br/>In Motion
+                  </h3>
+                  <motion.div 
+                    className="mt-4 h-[2px] bg-gradient-to-r from-beige-400 to-transparent"
+                    initial={{ width: 0 }}
+                    whileInView={{ width: '80%' }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1, delay: 0.5 }}
+                  />
                 </div>
-            </div>
-        </div>
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                  className="max-w-md space-y-4 text-sm leading-loose text-beige-900/80 text-justify font-sans font-light relative"
+                >
+                    <p>
+                        スポーツの現場にある熱気や、ふとした瞬間の表情。
+                        そういった「心が動く瞬間」を大切にシャッターを切っています。
+                    </p>
+                    <p>
+                        アスリートの輝きや、その場の空気感。
+                        それらを少しでも写真に残せたらと思っています。
+                    </p>
+                    {/* Decorative element */}
+                    <div className="absolute -right-4 bottom-0 w-8 h-8 border-r border-b border-beige-300/50 hidden md:block" />
+                </motion.div>
+            </motion.div>
+        </motion.div>
         <MarqueeText>
-            SAYA PHOTOGRAPHY — SPORTS & LIFE — SAYA PHOTOGRAPHY — SPORTS & LIFE — 
+            SAYA PHOTOGRAPHY — PORTFOLIO — SAYA PHOTOGRAPHY — PORTFOLIO — 
         </MarqueeText>
     </section>
   );
