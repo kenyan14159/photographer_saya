@@ -11,7 +11,7 @@ const formSchema = z.object({
   name: z.string().min(2, { message: "名前は2文字以上で入力してください" }),
   inquiryType: z.string().min(1, { message: "お問い合わせ内容を選択してください" }),
   email: z.string().email({ message: "有効なメールアドレスを入力してください" }),
-  phone: z.string().min(10, { message: "電話番号を入力してください" }),
+  phone: z.string().optional(),
   message: z.string().min(10, { message: "メッセージは10文字以上で入力してください" }),
 });
 
@@ -31,12 +31,21 @@ const Contact: React.FC = () => {
 
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
     
-    console.log(data);
-    toast.success('お問い合わせありがとうございます。送信されました。');
-    reset();
+    // メール本文を作成
+    const subject = encodeURIComponent(`【お問い合わせ】${data.inquiryType}`);
+    const body = encodeURIComponent(
+      `お名前: ${data.name}\n` +
+      `メールアドレス: ${data.email}\n` +
+      `電話番号: ${data.phone || '未入力'}\n` +
+      `お問い合わせ内容: ${data.inquiryType}\n\n` +
+      `メッセージ:\n${data.message}`
+    );
+    
+    // メーラーを開く
+    window.location.href = `mailto:contact@photographer-saya.com?subject=${subject}&body=${body}`;
+    
+    toast.success('メールアプリが開きます。送信をお願いします。');
     setIsSubmitting(false);
   };
 
@@ -173,11 +182,10 @@ const Contact: React.FC = () => {
                     >
                          <input 
                             type="tel" 
-                            placeholder="Phone *"
+                            placeholder="Phone（任意）"
                             className={`${inputClasses} group-hover:border-beige-400`}
                             {...register("phone")}
                         />
-                        {errors.phone && <p className={errorClasses}>{errors.phone.message}</p>}
                     </motion.div>
                 </div>
 
