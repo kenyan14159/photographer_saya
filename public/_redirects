@@ -1,0 +1,9 @@
+# Cloudflare Pages redirects
+# https://developers.cloudflare.com/pages/configuration/redirects/
+
+# Redirect www to non-www (canonical)
+https://www.photographer-saya.com/* https://photographer-saya.com/:splat 301
+
+# Handle trailing slash consistency
+/index.html / 301
+

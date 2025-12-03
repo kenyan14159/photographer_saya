@@ -1,0 +1,19 @@
+# Cloudflare Pages Configuration
+# https://developers.cloudflare.com/pages/functions/wrangler-configuration/
+
+name = "photographer-saya"
+compatibility_date = "2024-12-01"
+pages_build_output_dir = "out"
+
+# カスタムドメイン設定
+# ドメイン: photographer-saya.com
+# Cloudflareダッシュボードでカスタムドメインを追加してください
+
+[env.production]
+# 本番環境用の設定
+name = "photographer-saya"
+
+[env.preview]
+# プレビュー環境用の設定
+name = "photographer-saya-preview"
+

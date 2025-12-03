@@ -2,7 +2,7 @@ import React from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 const MarqueeText = ({ children }: { children?: React.ReactNode }) => (
-    <div className="relative flex overflow-hidden py-8 md:py-16 bg-[#F5F1E8] border-b border-[#C4B5A0]/30">
+    <div className="relative flex overflow-hidden py-8 md:py-16 bg-[#F5F1E8] border-b border-[#C4B5A0]/30" aria-hidden="true">
       <motion.div
         className="flex whitespace-nowrap"
         animate={{ x: ["0%", "-50%"] }}
@@ -41,9 +41,9 @@ const GalleryIntro: React.FC = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.2], [0.5, 1]);
 
   return (
-    <section className="relative z-20 bg-[#F5F1E8]">
+    <section className="relative z-20 bg-[#F5F1E8]" aria-label="ギャラリー紹介">
         {/* Decorative Line */}
-        <div className="absolute left-1/2 top-0 w-[1px] h-16 bg-gradient-to-b from-transparent to-beige-300 -translate-x-1/2" />
+        <div className="absolute left-1/2 top-0 w-[1px] h-16 bg-gradient-to-b from-transparent to-beige-300 -translate-x-1/2" aria-hidden="true" />
         
         <motion.div 
           style={{ opacity }}
@@ -63,8 +63,9 @@ const GalleryIntro: React.FC = () => {
                     whileInView={{ opacity: 0.5, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 1, delay: 0.3 }}
+                    aria-hidden="true"
                   >
-                    "
+                    &ldquo;
                   </motion.span>
                   <h3 className="text-3xl md:text-5xl font-serif italic text-beige-950 leading-tight">
                       Moments<br/>In Motion
@@ -75,6 +76,7 @@ const GalleryIntro: React.FC = () => {
                     whileInView={{ width: '80%' }}
                     viewport={{ once: true }}
                     transition={{ duration: 1, delay: 0.5 }}
+                    aria-hidden="true"
                   />
                 </div>
                 <motion.div 
@@ -93,7 +95,7 @@ const GalleryIntro: React.FC = () => {
                         それらを少しでも写真に残せたらと思っています。
                     </p>
                     {/* Decorative element */}
-                    <div className="absolute -right-4 bottom-0 w-8 h-8 border-r border-b border-beige-300/50 hidden md:block" />
+                    <div className="absolute -right-4 bottom-0 w-8 h-8 border-r border-b border-beige-300/50 hidden md:block" aria-hidden="true" />
                 </motion.div>
             </motion.div>
         </motion.div>

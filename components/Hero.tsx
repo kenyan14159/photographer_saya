@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ArrowDown } from 'lucide-react';
+import Image from 'next/image';
 
 const heroImages = [
-  'https://photographer-saya.com/wrps/wp-content/uploads/2025/10/saya29.jpg',
-  'https://photographer-saya.com/wrps/wp-content/uploads/2025/10/saya26.jpg',
-  'https://photographer-saya.com/wrps/wp-content/uploads/2025/10/saya25.jpg',
-  'https://photographer-saya.com/wrps/wp-content/uploads/2025/10/saya28.jpg',
+  '/saya_image/saya29.jpg',
+  '/saya_image/saya26.jpg',
+  '/saya_image/saya25.jpg',
+  '/saya_image/saya28.jpg',
 ];
 
 const Hero: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [imageErrors, setImageErrors] = useState<Set<number>>(new Set());
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
@@ -31,6 +33,10 @@ const Hero: React.FC = () => {
     }
   };
 
+  const handleImageError = (index: number) => {
+    setImageErrors(prev => new Set(prev).add(index));
+  };
+
   // Split text animation variants
   const letterVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -48,13 +54,13 @@ const Hero: React.FC = () => {
   const name = "saya";
 
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-[#F5F1E8]">
+    <section className="relative h-screen w-full overflow-hidden bg-[#F5F1E8]" aria-label="ヒーローセクション">
       
       {/* Decorative Corner Elements */}
-      <div className="absolute top-8 left-8 w-16 h-16 border-l border-t border-white/20 z-30" />
-      <div className="absolute top-8 right-8 w-16 h-16 border-r border-t border-white/20 z-30" />
-      <div className="absolute bottom-8 left-8 w-16 h-16 border-l border-b border-white/20 z-30" />
-      <div className="absolute bottom-8 right-8 w-16 h-16 border-r border-b border-white/20 z-30" />
+      <div className="absolute top-8 left-8 w-16 h-16 border-l border-t border-white/20 z-30" aria-hidden="true" />
+      <div className="absolute top-8 right-8 w-16 h-16 border-r border-t border-white/20 z-30" aria-hidden="true" />
+      <div className="absolute bottom-8 left-8 w-16 h-16 border-l border-b border-white/20 z-30" aria-hidden="true" />
+      <div className="absolute bottom-8 right-8 w-16 h-16 border-r border-b border-white/20 z-30" aria-hidden="true" />
       
       {/* Image Slideshow */}
       <motion.div 
@@ -70,21 +76,30 @@ const Hero: React.FC = () => {
             transition={{ duration: 1.5, ease: "easeOut" }}
             className="absolute inset-0 w-full h-full"
           >
-            <img
-              src={heroImages[currentImageIndex]}
-              alt="Sports Photography"
-              className="w-full h-full object-cover object-center"
-            />
+            {imageErrors.has(currentImageIndex) ? (
+              <div className="w-full h-full bg-beige-300 flex items-center justify-center">
+                <span className="text-beige-600 sr-only">画像を読み込めません</span>
+              </div>
+            ) : (
+              <Image
+                src={heroImages[currentImageIndex]}
+                alt={`スポーツ撮影作品 ${currentImageIndex + 1}`}
+                fill
+                className="object-cover object-center"
+                priority={currentImageIndex === 0}
+                onError={() => handleImageError(currentImageIndex)}
+              />
+            )}
           </motion.div>
         </AnimatePresence>
         
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50 z-10" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50 z-10" aria-hidden="true" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20 z-10" aria-hidden="true" />
       </motion.div>
 
       {/* Image Indicators */}
-      <div className="absolute bottom-32 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+      <div className="absolute bottom-32 left-1/2 -translate-x-1/2 z-30 flex gap-2" role="tablist" aria-label="スライドショー">
         {heroImages.map((_, index) => (
           <button
             key={index}
@@ -92,19 +107,22 @@ const Hero: React.FC = () => {
             className={`w-8 h-[2px] transition-all duration-500 ${
               index === currentImageIndex ? 'bg-white' : 'bg-white/30'
             }`}
+            role="tab"
+            aria-selected={index === currentImageIndex}
+            aria-label={`スライド ${index + 1}`}
           />
         ))}
       </div>
 
-      {/* Floating Particles Effect */}
-      <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
-        {[...Array(6)].map((_, i) => (
+      {/* Floating Particles Effect - Reduced for performance */}
+      <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden" aria-hidden="true">
+        {[...Array(4)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute w-1 h-1 bg-white/30 rounded-full"
             style={{
-              left: `${15 + i * 15}%`,
-              top: `${20 + (i % 3) * 25}%`,
+              left: `${20 + i * 20}%`,
+              top: `${25 + (i % 2) * 30}%`,
             }}
             animate={{
               y: [-20, 20, -20],
@@ -154,6 +172,7 @@ const Hero: React.FC = () => {
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{ duration: 1.2, delay: 1.2, ease: "circOut" }}
               className="h-[1px] bg-gradient-to-r from-transparent via-white/70 to-transparent mx-auto mb-6 w-24 md:w-32"
+              aria-hidden="true"
             />
             
             {/* Subtitle with stagger */}
@@ -173,16 +192,18 @@ const Hero: React.FC = () => {
               transition={{ duration: 0.8, delay: 1.8 }}
               onClick={scrollToGallery}
               className="group relative px-8 py-4 border border-white/40 text-white text-xs uppercase tracking-[0.25em] overflow-hidden transition-all duration-500 hover:border-white/80"
+              aria-label="ポートフォリオを見る"
             >
               <span className="relative z-10 flex items-center gap-3 transition-transform duration-300 group-hover:translate-x-1">
                 View Portfolio
-                <ArrowDown size={14} className="transition-transform duration-300 group-hover:translate-y-1" />
+                <ArrowDown size={14} className="transition-transform duration-300 group-hover:translate-y-1" aria-hidden="true" />
               </span>
               <motion.div 
                 className="absolute inset-0 bg-white/10"
                 initial={{ x: '-100%' }}
                 whileHover={{ x: 0 }}
                 transition={{ duration: 0.4 }}
+                aria-hidden="true"
               />
             </motion.button>
         </motion.div>
@@ -194,6 +215,7 @@ const Hero: React.FC = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2.5, duration: 1 }}
+        aria-hidden="true"
       >
         <motion.span 
           className="text-[8px] uppercase tracking-[0.3em] text-white/50"
@@ -216,6 +238,7 @@ const Hero: React.FC = () => {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 2, duration: 1 }}
+        aria-hidden="true"
       >
         <p className="text-[10px] uppercase tracking-[0.3em] text-white/40 transform -rotate-90 origin-center whitespace-nowrap">
           Tokyo / Yokohama
@@ -227,6 +250,7 @@ const Hero: React.FC = () => {
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 2, duration: 1 }}
+        aria-hidden="true"
       >
         <p className="text-[10px] uppercase tracking-[0.3em] text-white/40 transform rotate-90 origin-center whitespace-nowrap">
           Est. 2024

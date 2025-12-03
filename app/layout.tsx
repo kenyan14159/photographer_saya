@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import Script from 'next/script';
 import { Suspense } from 'react';
 import PageViewTracker from '@/components/PageViewTracker';
-import { Poppins, Playfair_Display, Inter, Bonbon, Send_Flowers, Emilys_Candy, Kiwi_Maru, Noto_Serif_JP } from 'next/font/google';
+import { Poppins, Playfair_Display, Send_Flowers, Noto_Serif_JP } from 'next/font/google';
 import { Toaster } from 'sonner';
 
 const poppins = Poppins({
@@ -20,38 +20,10 @@ const playfair = Playfair_Display({
   display: 'swap',
 });
 
-const inter = Inter({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
-  variable: '--font-inter',
-  display: 'swap',
-});
-
-const bonbon = Bonbon({
-  weight: '400',
-  subsets: ['latin'],
-  variable: '--font-bonbon',
-  display: 'swap',
-});
-
 const sendFlowers = Send_Flowers({
   weight: '400',
   subsets: ['latin'],
   variable: '--font-send-flowers',
-  display: 'swap',
-});
-
-const emilysCandy = Emilys_Candy({
-  weight: '400',
-  subsets: ['latin'],
-  variable: '--font-emilys-candy',
-  display: 'swap',
-});
-
-const kiwiMaru = Kiwi_Maru({
-  weight: '400',
-  subsets: ['latin'],
-  variable: '--font-kiwi-maru',
   display: 'swap',
 });
 
@@ -82,7 +54,7 @@ export const metadata: Metadata = {
     siteName: 'photographer-saya',
     images: [
       {
-        url: '/saya-original.jpg',
+        url: 'https://photographer-saya.com/saya-original.jpg',
         width: 1200,
         height: 630,
         alt: 'saya - photographer',
@@ -95,7 +67,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'photographer-saya',
     description: '東京・横浜で活動するフォトグラファーsaya。陸上・駅伝・マラソンなどのスポーツ撮影のほか、ポートレートやイベント撮影も承ります。',
-    images: ['/saya-original.jpg'],
+    images: ['https://photographer-saya.com/saya-original.jpg'],
   },
   robots: {
     index: true,
@@ -197,7 +169,7 @@ export default function RootLayout({
           });
         ` }} />
       </head>
-      <body className={`${poppins.variable} ${playfair.variable} ${inter.variable} ${bonbon.variable} ${sendFlowers.variable} ${emilysCandy.variable} ${kiwiMaru.variable} ${notoSerifJP.variable} font-sans antialiased`} suppressHydrationWarning>
+      <body className={`${poppins.variable} ${playfair.variable} ${sendFlowers.variable} ${notoSerifJP.variable} font-sans antialiased`} suppressHydrationWarning>
         <Suspense fallback={null}>
           <PageViewTracker />
         </Suspense>

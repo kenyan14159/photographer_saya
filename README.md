@@ -1,36 +1,136 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# photographer-saya
 
-## Getting Started
+東京・横浜で活動するフォトグラファーsayaのポートフォリオサイト
 
-First, run the development server:
+## 🌐 サイトURL
+
+**https://photographer-saya.com**
+
+## 🛠 技術スタック
+
+- **Framework**: Next.js 16
+- **Styling**: Tailwind CSS 4
+- **Animation**: Framer Motion
+- **UI Components**: Radix UI + shadcn/ui
+- **Hosting**: Cloudflare Pages
+
+## 📦 セットアップ
 
 ```bash
+# 依存関係のインストール
+npm install
+
+# 開発サーバー起動
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# 本番ビルド
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Cloudflare Pagesへのデプロイ
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 方法1: GitHubリポジトリ連携（推奨）
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Cloudflareダッシュボードにログイン**
+   - https://dash.cloudflare.com にアクセス
+   - 「Workers & Pages」→「Create」→「Pages」を選択
 
-## Learn More
+2. **GitHubリポジトリを接続**
+   - 「Connect to Git」を選択
+   - GitHubアカウントを連携し、このリポジトリを選択
 
-To learn more about Next.js, take a look at the following resources:
+3. **ビルド設定**
+   ```
+   プロジェクト名: photographer-saya
+   プロダクションブランチ: main
+   フレームワークプリセット: Next.js (Static HTML Export)
+   ビルドコマンド: npm run build
+   ビルド出力ディレクトリ: out
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. **環境変数（必要に応じて）**
+   ```
+   NODE_VERSION: 20
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+5. **「Save and Deploy」をクリック**
 
-## Deploy on Vercel
+### 方法2: Wrangler CLIを使用
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+# Wranglerのインストール
+npm install -g wrangler
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Cloudflareにログイン
+wrangler login
+
+# ビルド
+npm run build
+
+# デプロイ
+wrangler pages deploy out --project-name=photographer-saya
+```
+
+### カスタムドメイン設定（photographer-saya.com）
+
+1. **Cloudflare Pagesダッシュボードで設定**
+   - プロジェクト「photographer-saya」を選択
+   - 「Custom domains」タブを開く
+   - 「Set up a custom domain」をクリック
+
+2. **ドメインを追加**
+   ```
+   photographer-saya.com
+   ```
+
+3. **DNS設定**
+   - ドメインがCloudflareで管理されている場合は自動設定
+   - 外部DNSの場合は以下のCNAMEレコードを追加：
+   ```
+   Type: CNAME
+   Name: @ (または photographer-saya.com)
+   Target: photographer-saya.pages.dev
+   Proxy: ON (オレンジ色の雲)
+   ```
+
+4. **www サブドメインのリダイレクト**
+   ```
+   Type: CNAME
+   Name: www
+   Target: photographer-saya.pages.dev
+   Proxy: ON
+   ```
+   ※ `_redirects` ファイルで www → non-www へのリダイレクトが設定済み
+
+### SSL証明書
+
+Cloudflare Pagesは自動的にSSL証明書を発行・管理します。
+カスタムドメイン追加後、数分〜数時間でHTTPSが有効になります。
+
+## 📁 プロジェクト構成
+
+```
+photographer-saya/
+├── app/                    # Next.js App Router
+│   ├── globals.css        # グローバルスタイル
+│   ├── layout.tsx         # ルートレイアウト
+│   └── page.tsx           # トップページ
+├── components/            # Reactコンポーネント
+│   ├── ui/               # shadcn/uiコンポーネント
+│   ├── Hero.tsx          # ヒーローセクション
+│   ├── Gallery.tsx       # ギャラリー
+│   ├── About.tsx         # About
+│   └── Contact.tsx       # お問い合わせ
+├── public/               # 静的ファイル
+│   ├── _headers          # Cloudflare Pagesヘッダー設定
+│   └── _redirects        # リダイレクト設定
+├── lib/                  # ユーティリティ
+├── out/                  # ビルド出力（.gitignore）
+├── wrangler.toml         # Cloudflare設定
+└── next.config.ts        # Next.js設定
+```
+
+## 📝 ライセンス
+
+All Rights Reserved © saya
+

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion, useSpring, useMotionValue } from 'framer-motion';
 
 const CustomCursor: React.FC = () => {
   const [isHovered, setIsHovered] = useState(false);
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
+  const lastMoveTime = useRef(0);
 
   // Smooth spring physics for the cursor movement
   const springConfig = { damping: 25, stiffness: 300 };
@@ -13,8 +14,13 @@ const CustomCursor: React.FC = () => {
 
   useEffect(() => {
     const moveCursor = (e: MouseEvent) => {
-      cursorX.set(e.clientX - 16); // Center the cursor (32px / 2)
-      cursorY.set(e.clientY - 16);
+      // throttle: 約60fps (16ms)
+      const now = Date.now();
+      if (now - lastMoveTime.current >= 16) {
+        cursorX.set(e.clientX - 16); // Center the cursor (32px / 2)
+        cursorY.set(e.clientY - 16);
+        lastMoveTime.current = now;
+      }
     };
 
     const handleMouseOver = (e: MouseEvent) => {

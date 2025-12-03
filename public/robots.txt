@@ -1,0 +1,15 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://photographer-saya.com/sitemap.xml
+
+# Disallow
+Disallow: /api/
+Disallow: /_next/
+Disallow: /404
+
+# Crawl-delay (optional)
+Crawl-delay: 1
+

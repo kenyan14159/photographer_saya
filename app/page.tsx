@@ -18,16 +18,21 @@ const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Adjusted loading time for animation
+    // Optimized loading time (reduced from 2400ms to 1800ms)
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2400);
+    }, 1800);
 
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <div className="min-h-screen flex flex-col relative bg-[#F5F1E8]">
+      {/* Skip to content link for accessibility */}
+      <a href="#main-content" className="skip-link">
+        メインコンテンツにスキップ
+      </a>
+      
       <CustomCursor />
       
       <AnimatePresence mode="wait">
@@ -37,7 +42,7 @@ const Home: React.FC = () => {
       {!isLoading && (
         <>
           <Navbar />
-          <main className="flex-grow">
+          <main className="flex-grow" id="main-content">
             <Hero />
             <GalleryIntro />
             <Gallery />

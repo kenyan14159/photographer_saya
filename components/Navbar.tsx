@@ -16,6 +16,18 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // 背景スクロールロック
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
   const navLinks = [
     { name: 'Gallery', href: '#gallery' },
     { name: 'About', href: '#about' },
@@ -39,11 +51,14 @@ const Navbar: React.FC = () => {
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
           isScrolled ? 'bg-[#F5F1E8]/95 backdrop-blur-md py-4 shadow-sm' : 'bg-transparent py-8'
         }`}
+        role="navigation"
+        aria-label="メインナビゲーション"
       >
         {/* Scroll Progress Indicator */}
         <motion.div 
           className="absolute bottom-0 left-0 h-[1px] bg-gradient-to-r from-beige-400 via-beige-600 to-beige-400 origin-left"
           style={{ scaleX }}
+          aria-hidden="true"
         />
         
         <div className="px-6 md:px-12 flex justify-between items-center">
@@ -55,10 +70,12 @@ const Navbar: React.FC = () => {
                 style={{ fontFamily: 'var(--font-send-flowers)' }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                aria-label="トップページに戻る"
             >
               saya
               <motion.span 
                 className="absolute -bottom-1 left-0 w-0 h-[1px] bg-beige-400 group-hover:w-full transition-all duration-300"
+                aria-hidden="true"
               />
             </motion.a>
 
@@ -72,9 +89,10 @@ const Navbar: React.FC = () => {
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                   onClick={() => handleNavClick(link.href)}
                   className="text-xs font-medium uppercase tracking-[0.2em] text-beige-950 hover:text-beige-500 transition-colors relative group"
+                  aria-label={`${link.name}セクションに移動`}
                 >
                   {link.name}
-                  <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-beige-400 transition-all duration-300 group-hover:w-full"></span>
+                  <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-beige-400 transition-all duration-300 group-hover:w-full" aria-hidden="true"></span>
                 </motion.button>
               ))}
             </div>
@@ -84,6 +102,9 @@ const Navbar: React.FC = () => {
               className="md:hidden focus:outline-none text-beige-950 relative w-8 h-8 flex items-center justify-center"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               whileTap={{ scale: 0.9 }}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
+              aria-label={isMobileMenuOpen ? 'メニューを閉じる' : 'メニューを開く'}
             >
               <AnimatePresence mode="wait">
                 {isMobileMenuOpen ? (
@@ -94,7 +115,7 @@ const Navbar: React.FC = () => {
                     exit={{ rotate: 90, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <X size={24} strokeWidth={1.5} />
+                    <X size={24} strokeWidth={1.5} aria-hidden="true" />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -104,7 +125,7 @@ const Navbar: React.FC = () => {
                     exit={{ rotate: -90, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <Menu size={24} strokeWidth={1.5} />
+                    <Menu size={24} strokeWidth={1.5} aria-hidden="true" />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -116,14 +137,18 @@ const Navbar: React.FC = () => {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
+            id="mobile-menu"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
             className="fixed inset-0 bg-[#F5F1E8] z-30 flex flex-col items-center justify-center md:hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="モバイルメニュー"
           >
             {/* Background decoration */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
               <div className="absolute top-20 right-10 w-32 h-32 border border-beige-200 rounded-full opacity-30" />
               <div className="absolute bottom-40 left-10 w-20 h-20 border border-beige-200 opacity-30" />
             </div>
@@ -136,7 +161,7 @@ const Navbar: React.FC = () => {
                 visible: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
               }}
             >
-              {navLinks.map((link, index) => (
+              {navLinks.map((link) => (
                 <motion.button
                   key={link.name}
                   variants={{
@@ -151,6 +176,7 @@ const Navbar: React.FC = () => {
                     {link.name}
                     <motion.span 
                       className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-beige-400 group-hover:w-full transition-all duration-300"
+                      aria-hidden="true"
                     />
                   </span>
                 </motion.button>
@@ -176,6 +202,7 @@ const Navbar: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8 }}
+              aria-hidden="true"
             >
               Tokyo / Yokohama
             </motion.p>

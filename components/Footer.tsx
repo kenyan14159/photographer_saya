@@ -10,13 +10,13 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#F5F1E8] pb-8 pt-16 relative overflow-hidden">
+    <footer className="bg-[#F5F1E8] pb-8 pt-16 relative overflow-hidden" role="contentinfo">
         {/* Decorative top border */}
-        <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-beige-300 to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-beige-300 to-transparent" aria-hidden="true" />
         
         {/* Floating decorative elements */}
-        <div className="absolute top-10 left-20 w-16 h-16 rounded-full border border-beige-200/30 hidden lg:block" />
-        <div className="absolute bottom-20 right-16 w-8 h-8 border border-beige-200/30 rotate-45 hidden lg:block" />
+        <div className="absolute top-10 left-20 w-16 h-16 rounded-full border border-beige-200/30 hidden lg:block" aria-hidden="true" />
+        <div className="absolute bottom-20 right-16 w-8 h-8 border border-beige-200/30 rotate-45 hidden lg:block" aria-hidden="true" />
 
         <div className="max-w-6xl mx-auto px-6 text-center relative z-10">
             
@@ -41,17 +41,18 @@ const Footer: React.FC = () => {
                     href="mailto:contact@photographer-saya.com" 
                     className="text-lg md:text-xl font-serif italic text-beige-800 hover:text-beige-950 transition-colors duration-300 inline-block mb-6"
                     whileHover={{ scale: 1.02 }}
+                    aria-label="メールを送る: contact@photographer-saya.com"
                 >
                     contact@photographer-saya.com
                 </motion.a>
 
                 <div className="flex items-center justify-center space-x-2 text-beige-500/80 mb-8">
-                    <MapPin size={12} />
+                    <MapPin size={12} aria-hidden="true" />
                     <span className="text-[10px] tracking-[0.2em] uppercase">Tokyo / Yokohama</span>
                 </div>
 
                 {/* Social Icons */}
-                <div className="flex flex-col items-center gap-4">
+                <nav className="flex flex-col items-center gap-4" aria-label="SNSリンク">
                   <div className="flex justify-center gap-6">
                     <motion.a 
                       href="https://www.instagram.com/saya_sports_films/" 
@@ -60,8 +61,9 @@ const Footer: React.FC = () => {
                       className="flex items-center gap-2 px-4 py-2 rounded-full border border-beige-300 text-beige-500 hover:text-beige-950 hover:border-beige-950 transition-all duration-300"
                       whileHover={{ scale: 1.05, y: -2 }}
                       whileTap={{ scale: 0.95 }}
+                      aria-label="Instagram @saya_sports_films（新しいタブで開く）"
                     >
-                      <Instagram size={16} strokeWidth={1.5} />
+                      <Instagram size={16} strokeWidth={1.5} aria-hidden="true" />
                       <span className="text-xs tracking-wide">@saya_sports_films</span>
                     </motion.a>
                     <motion.a 
@@ -71,8 +73,9 @@ const Footer: React.FC = () => {
                       className="flex items-center gap-2 px-4 py-2 rounded-full border border-beige-300 text-beige-500 hover:text-beige-950 hover:border-beige-950 transition-all duration-300"
                       whileHover={{ scale: 1.05, y: -2 }}
                       whileTap={{ scale: 0.95 }}
+                      aria-label="Instagram @iam_saya_a（新しいタブで開く）"
                     >
-                      <Instagram size={16} strokeWidth={1.5} />
+                      <Instagram size={16} strokeWidth={1.5} aria-hidden="true" />
                       <span className="text-xs tracking-wide">@iam_saya_a</span>
                     </motion.a>
                   </div>
@@ -83,10 +86,11 @@ const Footer: React.FC = () => {
                     className="w-10 h-10 rounded-full border border-beige-300 flex items-center justify-center text-beige-500 hover:text-beige-950 hover:border-beige-950 transition-all duration-300"
                     whileHover={{ scale: 1.1, y: -2 }}
                     whileTap={{ scale: 0.95 }}
+                    aria-label="X (Twitter) @iam_saya_a（新しいタブで開く）"
                   >
-                    <Twitter size={16} strokeWidth={1.5} />
+                    <Twitter size={16} strokeWidth={1.5} aria-hidden="true" />
                   </motion.a>
-                </div>
+                </nav>
             </motion.div>
 
             {/* Footer Bottom Row */}
@@ -106,11 +110,13 @@ const Footer: React.FC = () => {
                     className="flex items-center text-[10px] text-beige-400 hover:text-beige-800 transition-colors uppercase tracking-[0.2em] gap-2 order-1 md:order-2 group px-4 py-2 border border-transparent hover:border-beige-300 rounded-full"
                     whileHover={{ y: -2 }}
                     whileTap={{ scale: 0.95 }}
+                    aria-label="ページの一番上に戻る"
                 >
                     Back to Top 
                     <motion.span
                       animate={{ y: [0, -3, 0] }}
                       transition={{ duration: 1.5, repeat: Infinity }}
+                      aria-hidden="true"
                     >
                       <ChevronUp size={12} />
                     </motion.span>

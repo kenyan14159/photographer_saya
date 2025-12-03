@@ -1,8 +1,10 @@
+export type PhotoCategory = 'EKIDEN_TRACK' | 'DAILY_CAFE';
+
 export interface Photo {
   id: number;
   src: string;
   title: string;
-  category: string;
+  category: PhotoCategory;
 }
 
 export interface ContactFormState {
